@@ -10,7 +10,7 @@ class TestRecord < ActiveRecord::Base
   searchable_by :path => :begin,
                 :method_name => :which_begins_like
   
-  searchable_by :format => :end,
+  searchable_by :host => :end,
                 :method_name => :which_ends_like
 end
 
@@ -62,6 +62,52 @@ describe TestRecord do
     
     it "should find nothing by part of an exact string" do 
       TestRecord.exact_like('zx').should be_empty
+    end
+  end
+  
+  describe "begining match" do 
+    before :all do 
+      @r1 = TestRecord.create :path => '/asdf'
+      @r2 = TestRecord.create :path => '/asdf/zxcv'
+    end
+    
+    it "should find both by a common beginning string" do 
+      TestRecord.which_begins_like('/asd').should == [@r1, @r2]
+    end
+    
+    it "should find both records by case insensitive search" do 
+      TestRecord.which_begins_like('/ASDF').should == [@r1, @r2]
+    end
+    
+    it "should find the second record only when it matches" do 
+      TestRecord.which_begins_like('/asdf/').should == [@r2]
+    end
+    
+    it "should find nothing by a middle strings" do 
+      TestRecord.which_begins_like('/zxc').should be_empty
+    end
+  end
+  
+  describe "ending match" do 
+    before :all do 
+      @r1 = TestRecord.create :host => 'asdf'
+      @r2 = TestRecord.create :host => 'zxcv.asdf'
+    end
+    
+    it "should find both records by a common ending" do 
+      TestRecord.which_ends_like('asdf').should == [@r1, @r2]
+    end
+    
+    it "should perform a case-insensitive search" do 
+      TestRecord.which_ends_like('ASDF').should == [@r1, @r2]
+    end
+    
+    it "should find only the second record by its end" do 
+      TestRecord.which_ends_like('.asdf').should == [@r2]
+    end
+    
+    it "should find nothing by an internal part of the string" do 
+      TestRecord.which_ends_like('asd').should be_empty
     end
   end
 end

@@ -7,7 +7,7 @@ class CreateTestRecordsTable < ActiveRecord::Migration
       t.string :code
       t.string :code_i
       t.string :path
-      t.string :format
+      t.string :host
     end
   end
   
