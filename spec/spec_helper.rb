@@ -19,8 +19,9 @@ ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => $db_
 
 # run mibrations
 require "#{dir}/db/migrate/create_test_records.rb"
+require "#{dir}/db/migrate/create_test_record_mates.rb"
 
 ActiveRecord::Migration.verbose = false
 
 CreateTestRecordsTable.migrate(:up)
-
+CreateTestRecordMatesTable.migrate(:up)

@@ -1,5 +1,10 @@
 module SearchableBy
   def searchable_by(*args)
+    # looking for the additional options
+    options = (args.size > 1 and args.last.is_a?(Hash)) ? args.pop : { }
+    method_name = options[:method_name]
+    options.delete :method_name
+    
     # getting the fields definition
     unless args.first.is_a?(Hash)
       fields = { }
@@ -10,8 +15,8 @@ module SearchableBy
       fields = args.first
     end
     
-    # getting the name-scope name
-    method_name = fields[:method_name] || 'like'
+    # trying to get the name-scope name from the inline options
+    method_name = fields[:method_name] || 'like' unless method_name
     fields.delete :method_name
     
     # compiling the conditions block
@@ -43,7 +48,7 @@ module SearchableBy
 
           '"'+ conditions.join(' OR ') +'", '+ values.join(', ')
         }]
-      }}
+      }.merge(#{options.inspect})}
     end_eval
   end
 end
