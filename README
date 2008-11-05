@@ -4,6 +4,14 @@ SearchableBy
 This simple plugin will create for you a named scope which you can use
 for a quick search. You can specify which fields and how should be searched
 
+Installation
+============
+
+Inside your rails application root, run
+
+git submodule add git://github.com/MadRabbit/searchable_by.git vendor/plugins/searchable_by
+git submodule init
+
 
 Example
 =======
@@ -37,7 +45,7 @@ options hash to the end of the arguments list. Like that
 class User < ActiveRecord::Base
   belongs_to :role
   
-  searchable_by {:login => :like, :roles.name => :exact}, {
+  searchable_by {:login => :like, 'roles.name' => :exact}, {
     :include => :role, :order => 'users.login'
   }
 end
