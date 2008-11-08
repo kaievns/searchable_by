@@ -8,7 +8,7 @@ class TestRecord < ActiveRecord::Base
                 :method_name => :exact_like
   
   searchable_by :path => :begin,
-                :method_name => :which_begins_like
+                'method_name' => :which_begins_like
   
   searchable_by :host => :end,
                 :method_name => :which_ends_like
